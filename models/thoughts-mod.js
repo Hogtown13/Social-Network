@@ -6,7 +6,7 @@ const ObjectId = Schema.ObjectId;
 
 
 
-const reactionSchema = new Schema({
+const ReactionSchema = new Schema({
     reactionId: {
         type: Schema.Types.ObjectId,
         default: () => new Types.ObjectId
@@ -55,7 +55,8 @@ const ThoughtsSchema = new Schema({
         type: [reactionSchema]
     },
     toJSON: {
-        getters: true,
+        virtuals: true,
+        getters: true
     },
     id: false,
 
