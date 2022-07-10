@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const express = require('express');
 
 const app = express();
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 3001;
 
 app.use(require('./routes'));
 
@@ -21,4 +21,4 @@ mongoose.set('debug', true);
 app.use(require('./routes'));
 
 
-app.listen(PORT, () => console.log(`APP now listening on Port ${PORT}`))
+app.listen(PORT, () => console.log(`APP now listening on localhost:${PORT}`))

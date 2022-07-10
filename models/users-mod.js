@@ -1,6 +1,6 @@
-const { match } = require('assert');
+
 const { Schema, model } = require('mongoose');
-const Thoughts = require('./Thoughts');
+
 
 const UsersSchema = new Schema({
     username: {
@@ -14,31 +14,42 @@ const UsersSchema = new Schema({
         trim: true,
         lowercase: true,
         unique: true,
-        required: 'Valid email address required',
-        validate: [validateEmail, 'Please give a valid email address'],
+        required: true,
         match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'Please fill a valid email address']
     },
     thoughts: [{
         type: Schema.Types.ObjectId,
-        ref: 'Thoughts'
+        ref: 'Thoughts',
+        required: true
     }],
 
     friends: [{
         type: Schema.Types.ObjectId,
-        ref: 'Users'
+        ref: 'Users',
+        required: true
     }]
 },
     {
         toJSON: {
-            virtuals: true,
-            getters: true,
+            virtuals: true
         },
-        id: false
-    }
+        
+    },
+);
 
-)
-UsersSchema.virtual('friendCount').get(function () {
-    return this.friends.length
+UsersSchema.post('findOneAndDelete', async function (thoughts) {
+    console.log('These are your thoughts: ' + thoughts)
+    if (thoughts) {
+        const data = await Thoughts.deleteMany({ _id: { $in: [thoughts.thoughts] } } );
+        console.log('This is data: ' + data);
+    }
+});
+UsersSchema.virtual('friendCount').get(function() {
+    if (this.friends.length > 0) {
+        return this.friends.length;
+    } else {
+        return 0;
+    }
 });
 
 const Users = model('Users', UsersSchema);
