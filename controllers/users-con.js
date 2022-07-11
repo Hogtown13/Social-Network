@@ -32,11 +32,11 @@ const usersController = {
         }
     },
 
-    async addUsers({ body }, res) {
+    async createUsers({ body }, res) {
         try {
-            const createUsers = await Users.create(body);
+            const createUsers = await Users.create(body)
             if (!createUsers) {
-                res.status(400).json({ message: 'Create new user.' });
+                res.status(400).json({ message: 'Create new user.' })
             }
             res.json(createUsers);
         } catch (err) {

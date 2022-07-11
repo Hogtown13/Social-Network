@@ -1,21 +1,22 @@
-
+const Thoughts = require('./thoughts-mod');
 const { Schema, model } = require('mongoose');
-
 
 const UsersSchema = new Schema({
     username: {
         type: String,
+        name: 'username',
         uniuque: true,
         required: true,
         trim: true
     },
     email: {
         type: String,
+        name: 'email',
         trim: true,
         lowercase: true,
         unique: true,
         required: true,
-        match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'Please fill a valid email address']
+        match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'Please fill a valid  address']
     },
     thoughts: [{
         type: Schema.Types.ObjectId,
@@ -31,9 +32,10 @@ const UsersSchema = new Schema({
 },
     {
         toJSON: {
-            virtuals: true
+            virtuals: true,
+            getters: true
         },
-        
+        id: false
     },
 );
 
@@ -53,6 +55,7 @@ UsersSchema.virtual('friendCount').get(function() {
 });
 
 const Users = model('Users', UsersSchema);
+
 
 
 module.exports = Users
